@@ -1,0 +1,53 @@
+body {
+  background: #ccc;
+  padding-top: 60px;
+}
+
+.message {
+  border: 2px solid #aaa;
+  color: #333;
+  background: #eef;
+  padding: .75em;
+  margin: 0 .5em 1em 1em;
+  -webkit-border-radius: .5em;
+     -moz-border-radius: .5em;
+          border-radius: .5em;
+  -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.message #error {
+  background: #9d261d;
+  color: #fff;
+}
+
+footer {
+  display: block;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: .5em 0;
+  margin: 0;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  background: #eef;
+  border-top: 1px solid #ccc;
+  -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25);
+     -moz-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.clear {
+  clear:both;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}

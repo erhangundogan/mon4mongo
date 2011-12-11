@@ -1,0 +1,9 @@
+#pingServer
+  .message
+    a.close(href="#", onclick="$('#pingServer').remove()") ×
+    - if (result.is_error())
+      h4 Error
+      =result.error_message()
+    - else
+      h4 Server ping
+      p OK

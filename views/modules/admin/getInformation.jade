@@ -1,0 +1,9 @@
+#getInformation
+  .message
+    a.close(href="#", onclick="$('#getInformation').remove()") ×
+    h4 Server information
+    table.bordered-table.zebra-striped
+      each value,key in result
+        tr
+          td.right=key
+          td=value

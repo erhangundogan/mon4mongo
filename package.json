@@ -1,0 +1,11 @@
+{
+    "name": "mon4mongo"
+  , "author": "Erhan Gundogan <erhan@trposta.net>"
+  , "version": "0.0.1"
+  , "private": false
+  , "dependencies": {
+      "express": ">= 2.5.1"
+    , "jade": ">= 0.19.0"
+    , "mongodb": ">= 0.9.7"
+  }
+}

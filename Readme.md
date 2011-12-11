@@ -1,6 +1,6 @@
 mon4mongo
 ==========
-MongoDB database management web server boosted with node.js & express.
+MongoDB database management web server boosted with node.js and express. xhr and partial renders are also used.
 
 ![mon4mongo Screenshot](http://s3.amazonaws.com/mass.io/various/mon4mongo-ss.png)
 

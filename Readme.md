@@ -11,9 +11,10 @@ Project is in a development state. Libraries below are using:
 + jquery
 
 You can clone github project or use npm to install.
-```
-npm install mon4mongo
-```
+
+`npm install mon4mongo`
+
+![mon4mongo Screenshot](http://s3.amazonaws.com/mass.io/various/mon4mongo-ss.png)
 
 Author
 ------

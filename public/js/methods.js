@@ -10,7 +10,10 @@ $(function(){
       requestAddress: "/getInformation" },
     { navLinkID: "#profilingLevelLink",
       bodyElementID: "#profilingLevel",
-      requestAddress: "/profilingLevel" }
+      requestAddress: "/profilingLevel" },
+    { navLinkID: "#collectionsInfoLink",
+      bodyElementID: "#collectionsInfo",
+      requestAddress: "/collectionsInfo" }
   ].map(function(item) {
     $(item.navLinkID).bind("click", function(event) {
       event.preventDefault();

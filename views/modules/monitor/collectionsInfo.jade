@@ -1,0 +1,10 @@
+#collectionsInfo
+  .message
+    a.close(href="#", onclick="$('#collectionsInfo').remove()") ×
+    h4 Collections information
+    table.bordered-table.zebra-striped
+      each value,key in result
+        - if (typeof value !== "function")
+          tr
+            td.right.labelColumn=key
+            td=value

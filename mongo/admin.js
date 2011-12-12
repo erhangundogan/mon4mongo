@@ -36,11 +36,7 @@ admin.prototype.call = function(method, cb) {
 
   if (!self._admin) {
     self.initialize(function(err, admin){
-      if (err) {
-        return cb(err, null);
-      } else {
-        return methodCall(admin);
-      }
+      return err ? cb(err, null) :methodCall(admin);
     })
   } else {
     return methodCall(self._admin);

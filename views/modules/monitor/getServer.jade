@@ -3,14 +3,9 @@
     a.close(href="#", onclick="$('#getServer').remove()") ×
     h4 Server settings
     table.bordered-table.zebra-striped
-      tr
-        td.right Host
-        td=result.host
-      tr
-        td.right Port
-        td=result.port
-      tr
-        td.right Database
-        td=result.db
+      each value,key in result
+        tr
+          td.right.labelColumn=key
+          td=value
     .alert-actions
       a.btn.small.primary(href="#") Change Server

@@ -67,6 +67,8 @@ app.get("/getServer", getRoute(monitor, "getServer", "modules/monitor/getServer"
 app.get("/getInformation", getRoute(admin, "serverInfo", "modules/admin/getInformation"));
 app.get("/pingServer", getRoute(admin, "ping", "modules/admin/pingServer"));
 app.get("/profilingLevel", getRoute(admin, "profilingLevel", "modules/admin/profilingLevel"));
+app.get("/collectionsInfo", getRoute(monitor, "collectionsInfo", "modules/monitor/collectionsInfo"));
+
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode",

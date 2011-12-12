@@ -33,30 +33,33 @@ monitor.prototype.initialize = function(callback) {
 
 monitor.prototype.getServer = function(callback) {
   var self = this;
-  function _getServer() {
+  function _getServer(db) {
     return callback(null, {
-      "host": self.host,
-      "port": self.port,
-      "db": self.dbName
+      "host": db.serverConfig.host,
+      "port": db.serverConfig.port,
+      "db": db.databaseName,
+      "state": db.state,
+      "autoReconnect": db.serverConfig.autoReconnect
     });
   }
-  if (!this.db) {
+  if (!self.db) {
     this.initialize(function(err, db){
-      if (!err) {
-        return _getServer();
-      } else {
+      if (err) {
+        console.log(err);
         return callback(err, null);
+      } else {
+        return _getServer(db);
       }
     });
   } else {
-    return _getServer();
+    return _getServer(self.db);
   }
 }
 
 monitor.prototype.call = function(method, cb) {
   var self = this;
-  function methodCall(_monitor) {
-    _monitor[method](function(err, result) {
+  function methodCall(db) {
+    db[method](function(err, result) {
       if (err) {
         console.log(err);
         return cb(err, null);
@@ -66,12 +69,20 @@ monitor.prototype.call = function(method, cb) {
     });
   }
 
-  if (!self.db) {
-    self.initialize(function(err, db) {
-      return err ? cb(err, null) : methodCall(self);
-    })
+  if (self.constructor.prototype.hasOwnProperty(method)) {
+    self[method](function(err, result) {
+      return err ? cb(err, null) : cb(null, result);
+    });
   } else {
-    return methodCall(self);
+    if (!self.db) {
+      self.initialize(function(err, db) {
+        return err
+          ? cb(err, null)
+          : methodCall(db);
+      })
+    } else {
+      return methodCall(self.db);
+    }
   }
 }
 

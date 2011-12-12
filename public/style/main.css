@@ -51,3 +51,7 @@ footer {
 .right {
   text-align: right;
 }
+
+.labelColumn {
+  width: 150px;
+}

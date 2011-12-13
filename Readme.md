@@ -2,7 +2,7 @@ mon4mongo
 ==========
 MongoDB database management web server boosted with node.js and express. xhr and partial renders are also used.
 
-![mon4mongo Screenshot](http://s3.amazonaws.com/mass.io/various/mon4mongo-ss.png)
+![mon4mongo Screenshot](http://s3-eu-west-1.amazonaws.com/mass-io/github/mon4mongo-ss.png)
 
 Project is in a development state. Libraries below are using:
 

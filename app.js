@@ -1,16 +1,23 @@
 
+/*!
+ * mon4mongo
+ * Copyright(c) 2010 Erhan Gundogan <erhan@trposta.net>
+ * MIT Licensed
+ */
+
 /**
  * Module dependencies.
  */
-
 var express = require("express")
   , app = module.exports.app = express.createServer()
-  , MongoMonitor = require("./mongo/monitor.js").monitor
+  , MongoMonitor = require("./mongo/monitor")
   , monitor = new MongoMonitor()
-  , MongoAdmin = require("./mongo/admin.js").admin
+  , MongoAdmin = require("./mongo/admin")
   , admin = new MongoAdmin(monitor);
 
-// Configuration
+/**
+ * Configuration.
+ */
 app.configure(function(){
   app.set("views", __dirname + "/views");
   app.set("view engine", "jade");
@@ -23,13 +30,18 @@ app.configure(function(){
 });
 
 app.configure("development", function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({
+    dumpExceptions: true, showStack: true
+  }));
 });
 
 app.configure("production", function(){
   app.use(express.errorHandler()); 
 });
 
+/**
+ * Dynamic Helpers.
+ */
 app.dynamicHelpers({
   base: function() {
     return "/" == app.route ? "" : app.route;
@@ -39,13 +51,23 @@ app.dynamicHelpers({
   }
 });
 
-// Automatic route generator from module methods.
-// base (mongodb module): admin,
-// command (base module function): serverInfo,
-// template (jade template): getInformation
+/**
+ * Module base functions wrapper
+ * calls command function on base and render
+ * associated template with callback results
+ *
+ * Examples:
+ *  getRoute(admin, "ping", "modules/admin/pingServer");
+ *
+ * @param {String} base
+ * @param {String} command
+ * @param {String} template
+ * @return {Function} route
+ * @api public
+ */
 function getRoute(base, command, template) {
   return function(req, res) {
-    base.call(command, function(err, result) {
+    base.fn(command, function(err, result) {
       if (err) {
         res.partial("error", { err:err });
       } else {
@@ -59,15 +81,29 @@ function getRoute(base, command, template) {
   }
 }
 
-// Routes
+/**
+ * Routes.
+ */
 app.get("/", function(req, res){
   res.render("index");
 });
-app.get("/getServer", getRoute(monitor, "getServer", "modules/monitor/getServer"));
-app.get("/getInformation", getRoute(admin, "serverInfo", "modules/admin/getInformation"));
-app.get("/pingServer", getRoute(admin, "ping", "modules/admin/pingServer"));
-app.get("/profilingLevel", getRoute(admin, "profilingLevel", "modules/admin/profilingLevel"));
-app.get("/collectionsInfo", getRoute(monitor, "collectionsInfo", "modules/monitor/collectionsInfo"));
+app.get("/getServer",
+  getRoute(monitor, "getServer", "modules/monitor/getServer"));
+
+app.get("/getInformation",
+  getRoute(admin, "serverInfo", "modules/admin/getInformation"));
+
+app.get("/pingServer",
+  getRoute(admin, "ping", "modules/admin/pingServer"));
+
+app.get("/profilingLevel",
+  getRoute(admin, "profilingLevel", "modules/admin/profilingLevel"));
+
+app.get("/collectionsInfo",
+  getRoute(monitor, "collectionsInfo", "modules/monitor/collectionsInfo"));
+
+app.get("/collectionsNames",
+  getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
 
 
 app.listen(3000);

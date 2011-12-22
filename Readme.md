@@ -4,18 +4,27 @@ MongoDB database management web server boosted with node.js and express. xhr and
 
 ![mon4mongo Screenshot](http://s3-eu-west-1.amazonaws.com/mass-io/github/mon4mongo-ss.png)
 
-Project is in a development state. Libraries below are using:
+Dependencies
+------------
 
-+ node.js
-+ express
-+ jade
-+ node-mongodb-native
-+ bootstrap
-+ jquery
++ node.js@0.4.12
++ express@2.5.2
++ jade@0.19.0
++ mongodb@0.9.7-2-5
 
 You can clone github project or use npm to install.
 
 `npm install mon4mongo`
+
+Implementation
+--------------
+
++ Add route to app.js. Check out the getRoute function description
++ Create jade view with appropriate properties (check out the other views in views/modules/...)
++ Create link in views/master/sidebar.jade
++ Add properties to mapping array in /public/js/methods.js to send xhr requests to correct route
++ if you want to extend base capabilities just fork base modules (/mongo/...) or add new one
+
 
 Author
 ------

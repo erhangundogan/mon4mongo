@@ -1,46 +1,84 @@
+
+/*!
+ * mon4mongo - admin
+ * Copyright(c) 2010 Erhan Gundogan <erhan@trposta.net>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
 var mongo = require("mongodb");
 
-function admin(monitor) {
+/**
+ * Admin object prototype.
+ *
+ * @param {object} monitor
+ * @api public
+ */
+function Admin(monitor) {
   this.monitor = monitor;
 }
 
-// initialize
-admin.prototype.initialize = function(callback) {
-  if (!this._admin) {
-    this.monitor.initialize(function(err, db) {
-      if (err) {
-        console.log(err);
-        return callback(err, null);
-      } else {
-        this._admin = new mongo.Admin(db);
-        return callback(null, this._admin);
-      }
-    })
-  } else {
-    return callback(null, this._admin);
-  }
+/**
+ * When admin object created this
+ * must be the first called method to
+ * initialize mongodb admin object
+ *
+ * @param {function} callback
+ * @return {object} chaining
+ * @api public
+ */
+Admin.prototype.initialize = function(callback) {
+  this.monitor.initialize(function(err, db) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+       callback(null, new mongo.Admin(db));
+    }
+  });
+
+  return this;
 }
 
-admin.prototype.call = function(method, cb) {
+/**
+ * MongoDb driver admin object
+ * wrapper for generic method calls
+ *  - Initializes admin module
+ *  - Calls method on module
+ *
+ *  @param {string} method
+ *  @param {function} callback
+ *  @return {object} chaining
+ *  @api public
+ */
+Admin.prototype.fn = function(method, callback) {
   var self = this;
-  function methodCall(admin) {
-    admin[method](function(err, result) {
+
+  function methodCall(_admin) {
+    _admin[method](function(err, result) {
       if (err) {
         console.log(err);
-        return cb(err, null);
+        callback(err, null);
       } else {
-        return cb(null, result);
+        callback(null, result);
       }
     });
   }
 
-  if (!self._admin) {
-    self.initialize(function(err, admin){
-      return err ? cb(err, null) :methodCall(admin);
-    })
-  } else {
-    return methodCall(self._admin);
-  }
+  this.initialize(function(err, _admin){
+    if (err) {
+      callback(err, null)
+    } else {
+      methodCall(_admin);
+    }
+  });
+
+  return this;
 }
 
-exports.admin = admin;
+/*
+ * Exports
+ */
+exports.admin = module.exports = Admin;

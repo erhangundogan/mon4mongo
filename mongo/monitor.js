@@ -1,9 +1,33 @@
+
+/*!
+ * mon4mongo - monitor
+ * Copyright(c) 2010 Erhan Gundogan <erhan@trposta.net>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
 var mongo = require("mongodb")
   , Db = mongo.Db
   , Connection = mongo.Connection
-  , Server = mongo.Server;
+  , Server = mongo.Server
+  , async = require("async");
 
-function monitor(host, port, dbName) {
+/**
+ * Monitor object prototype.
+ * It corresponds to mongodb.Db object
+ *
+ * Examples:
+ *  var monitor = new Monitor();
+ *  var monitor = new Monitor("localhost", 27017, "test");
+ *
+ * @param {string} host
+ * @param {number} port
+ * @param {string] dbName
+ * @api public
+ */
+function Monitor(host, port, dbName) {
   this.host = host || (process.env["MONGO_NODE_DRIVER_HOST"] != null
     ? process.env["MONGO_NODE_DRIVER_HOST"]
     : "localhost");
@@ -13,7 +37,16 @@ function monitor(host, port, dbName) {
   this.dbName = dbName || "test";
 }
 
-monitor.prototype.initialize = function(callback) {
+/**
+ * When monitor object created this
+ * must be the first called method to
+ * initialize mongodb
+ *
+ * @param {function} callback
+ * @return {object} chaining
+ * @api public
+ */
+Monitor.prototype.initialize = function(callback) {
   if (!this.db)
     this.db = new Db(this.dbName, new Server(this.host, this.port, {}), { native_parser:false });
 
@@ -21,20 +54,75 @@ monitor.prototype.initialize = function(callback) {
     this.db.open(function(err, db) {
       if (err != null) {
         console.log(err);
-        return callback(err, null);
+        callback(err, null);
       } else {
-        return callback(null, db);
+        callback(null, db);
       }
     });
   } else {
-    return callback(null, this.db);
+    callback(null, this.db);
   }
+
+  return this;
 }
 
-monitor.prototype.getServer = function(callback) {
+/**
+ * Sometimes you want to implement a feature that doesn't exists
+ * in mongodb objects. You can write your own functions with
+ * mon4mongo modules and you can call them with same fashion.
+ * However keep in mind that when you implement same method
+ * in mon4mongo native mongodb method will be overridden.
+ *
+ * Examples:
+ *  Db.prototype.collectionNames // native mongoDb method
+ *  Monitor.prototype.collectionNames // overrides native method
+ *
+ * collectionNames using Caolan McMahon's async utilities library
+ * https://github.com/caolan/async
+ *
+ * async.waterfall runs an array of functions in series,
+ * each passing their results to the next in the array.
+ *
+ * @param {function} cb (callback)
+ * @return {object} chaining
+ * @api public
+ */
+Monitor.prototype.collectionNames = function(cb) {
+  var self = this;
+  async.waterfall([
+    function(callback) {
+      self.initialize(function(err, result) {
+        callback(err, result);
+      });
+    },
+    function(db, callback) {
+      db.collectionNames(function(err, result) {
+        callback(err, result);
+      });
+    },
+    function(collections, callback) {
+      var names = collections.map(function(collection) {
+        return collection.name;
+      });
+      callback(null, names);
+    }
+  ], function(err, results) {
+    return cb(err, results);
+  });
+}
+
+/**
+ * Gets server specific information.
+ *
+ * @param {function} callback
+ * @return {object} chaining
+ * @api public
+ */
+
+Monitor.prototype.getServer = function(callback) {
   var self = this;
   function _getServer(db) {
-    return callback(null, {
+    callback(null, {
       "host": db.serverConfig.host,
       "port": db.serverConfig.port,
       "db": db.databaseName,
@@ -42,48 +130,75 @@ monitor.prototype.getServer = function(callback) {
       "autoReconnect": db.serverConfig.autoReconnect
     });
   }
+
   if (!self.db) {
     this.initialize(function(err, db){
       if (err) {
         console.log(err);
-        return callback(err, null);
+        callback(err, null);
       } else {
-        return _getServer(db);
+        _getServer(db);
       }
     });
   } else {
-    return _getServer(self.db);
+    _getServer(self.db);
   }
+
+  return this;
 }
 
-monitor.prototype.call = function(method, cb) {
+/**
+ * MongoDb driver db object
+ * wrapper for generic method calls
+ *  - Initializes db module
+ *  - Calls method on module
+ *
+ *  @param {string} method
+ *  @param {function} callback
+ *  @return {object} chaining
+ *  @api public
+ */
+Monitor.prototype.fn = function(method, callback) {
   var self = this;
   function methodCall(db) {
     db[method](function(err, result) {
       if (err) {
         console.log(err);
-        return cb(err, null);
+        callback(err, null);
       } else {
-        return cb(null, result);
+        callback(null, result);
       }
     });
   }
 
   if (self.constructor.prototype.hasOwnProperty(method)) {
     self[method](function(err, result) {
-      return err ? cb(err, null) : cb(null, result);
+      if (err) {
+        console.log(err);
+        callback(err, null);
+      } else {
+        callback(null, result);
+      }
     });
   } else {
     if (!self.db) {
       self.initialize(function(err, db) {
-        return err
-          ? cb(err, null)
-          : methodCall(db);
+        if (err) {
+          console.log(err);
+          callback(err, null);
+        } else {
+          methodCall(db);
+        }
       })
     } else {
-      return methodCall(self.db);
+      methodCall(self.db);
     }
   }
+
+  return this;
 }
 
-exports.monitor = monitor;
+/*
+ * Exports
+ */
+exports.monitor = module.exports = Monitor;

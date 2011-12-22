@@ -1,46 +1,84 @@
+
+/*!
+ * mon4mongo - collection
+ * Copyright(c) 2010 Erhan Gundogan <erhan@trposta.net>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
 var mongo = require("mongodb");
 
-function collection(monitor) {
+/**
+ * Collection object prototype.
+ *
+ * @param {object} monitor
+ * @api public
+ */
+function Collection(monitor) {
   this.monitor = monitor;
 }
 
-// initialize
-collection.prototype.initialize = function(callback) {
-  if (!this._collection) {
-    this.monitor.initialize(function(err, db) {
-      if (err) {
-        console.log(err);
-        return callback(err, null);
-      } else {
-        this._collection = new mongo.Collection(db);
-        return callback(null, this._collection);
-      }
-    })
-  } else {
-    return callback(null, this._collection);
-  }
+/**
+ * When collection object created this
+ * must be the first called method to
+ * initialize mongodb collection object
+ *
+ * @param {function} callback
+ * @return {object} chaining
+ * @api public
+ */
+Collection.prototype.initialize = function(callback) {
+  this.monitor.initialize(function(err, db) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, new mongo.Collection(db));
+    }
+  });
+
+  return this;
 }
 
-collection.prototype.call = function(method, cb) {
+/**
+ * MongoDb driver collection object
+ * wrapper for generic method calls
+ *  - Initializes admin module
+ *  - Calls method on module
+ *
+ *  @param {string} method
+ *  @param {function} callback
+ *  @return {object} chaining
+ *  @api public
+ */
+Collection.prototype.fn = function(method, callback) {
   var self = this;
+
   function methodCall(_collection) {
     _collection[method](function(err, result) {
       if (err) {
         console.log(err);
-        return cb(err, null);
+        callback(err, null);
       } else {
-        return cb(null, result);
+        callback(null, result);
       }
     });
   }
 
-  if (!self._collection) {
-    self.initialize(function(err, _collection){
-      return err ? cb(err, null) : methodCall(_collection);
-    })
-  } else {
-    return methodCall(self._collection);
-  }
+  self.initialize(function(err, _collection){
+    if (err) {
+      callback(err, null);
+    } else {
+      methodCall(_collection);
+    }
+  });
+
+  return this;
 }
 
-exports.collection = collection;
+/*
+ * Exports
+ */
+exports.collection = module.exports = Collection;

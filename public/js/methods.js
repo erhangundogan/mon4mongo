@@ -13,7 +13,10 @@ $(function(){
       requestAddress: "/profilingLevel" },
     { navLinkID: "#collectionsInfoLink",
       bodyElementID: "#collectionsInfo",
-      requestAddress: "/collectionsInfo" }
+      requestAddress: "/collectionsInfo" },
+    { navLinkID: "#collectionsNamesLink",
+      bodyElementID: "#collectionsNames",
+      requestAddress: "/collectionsNames" }
   ].map(function(item) {
     $(item.navLinkID).bind("click", function(event) {
       event.preventDefault();

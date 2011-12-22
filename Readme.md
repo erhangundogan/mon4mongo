@@ -7,10 +7,10 @@ MongoDB database management web server boosted with node.js and express. xhr and
 Dependencies
 ------------
 
-+ node.js@0.4.12
-+ express@2.5.2
-+ jade@0.19.0
-+ mongodb@0.9.7-2-5
++ node.js = 0.4.12
++ express >= 2.5.1
++ jade >= 0.19.0
++ mongodb = 0.9.7
 
 You can clone github project or use npm to install.
 

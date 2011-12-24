@@ -2,8 +2,9 @@
 - if (settings.theme.columnMode)
   - classes.push("span6");
 
-div#profilingLevel(class=classes)
+#profilingLevel(class=classes)
   a.close(href="#", onclick="$('#profilingLevel').remove()") ×
+  a.close(href="#", onclick="$('#profilingLevel').remove(); bindAddress('/profilingLevel');") ↻
   h4 Profiling level
   p(style="text-transform: uppercase;")=result
   .alert-actions

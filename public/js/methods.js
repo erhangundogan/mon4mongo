@@ -36,6 +36,11 @@ vAlignment.prototype.calculateColumns = function() {
   return this;
 }
 
+/**
+ * sidebar links jQuery bindings.
+ *
+ */
+
 $(function(){
   [ { navLinkID: "#pingLink",
       bodyElementID: "#pingServer",
@@ -63,18 +68,19 @@ $(function(){
         return;
       }
 
-      $.ajax({
-        url: item.requestAddress,
-        dataType: "html",
-        success: function(err, result) {
-          var vAlign = new vAlignment();
-          var element = "#" + vAlign.calculateColumns().getKey().result.key;
-          $(element).prepend( err || result );
-        }
-      });
+      bindAddress(item.requestAddress);
     });
   });
 });
 
-
-
+function bindAddress(address) {
+  $.ajax({
+    url: address,
+    dataType: "html",
+    success: function(err, result) {
+      var vAlign = new vAlignment();
+      var element = "#" + vAlign.calculateColumns().getKey().result.key;
+      $(element).prepend( err || result );
+    }
+  });
+}

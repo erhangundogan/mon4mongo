@@ -4,6 +4,7 @@
 
 div#getServer(class=classes)
   a.close(href="#", onclick="$('#getServer').remove()") ×
+  a.close(href="#", onclick="$('#getServer').remove(); bindAddress('/getServer');") ↻
   h4 Server settings
   - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
   table(class=tableClasses)

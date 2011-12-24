@@ -2,8 +2,9 @@
 - if (settings.theme.columnMode)
   - classes.push("span6");
 
-div#pingServer(class=classes)
+#pingServer(class=classes)
   a.close(href="#", onclick="$('#pingServer').remove()") ×
+  a.close(href="#", onclick="$('#pingServer').remove(); bindAddress('/pingServer');") ↻
   h4 Ping result
   - if (result.is_error())
     p Error

@@ -2,8 +2,9 @@
 - if (settings.theme.columnMode)
   - classes.push("span6");
 
-div#collectionsInfo(class=classes)
+#collectionsInfo(class=classes)
   a.close(href="#", onclick="$('#collectionsInfo').remove()") ×
+  a.close(href="#", onclick="$('#collectionsInfo').remove(); bindAddress('/collectionsInfo');") ↻
   h4 Collections information
   - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
   table(class=tableClasses)

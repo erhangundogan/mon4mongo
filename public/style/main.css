@@ -21,10 +21,10 @@ body {
 .close {
   opacity: 1;
   color: #c00;
-  font-size: 30px;
-  margin: 0;
+  font-size: 24px;
+  margin: 0 0 0 3px;
   border: 1px solid #c00;
-  padding: 4px 2px;
+  padding: 5px;
   border-radius: 3px;
 }
 
@@ -77,10 +77,6 @@ footer {
 
 .labelColumn {
   width: 150px;
-}
-
-.not-overflow {
-  overflow: scroll;
 }
 
 .info-table {

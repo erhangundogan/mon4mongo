@@ -110,6 +110,6 @@ app.get("/collectionsNames",
   getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
 
 
-app.listen(3000);
+app.listen(settings.server.port);
 console.log("Express server listening on port %d in %s mode",
   app.address().port, app.settings.env);

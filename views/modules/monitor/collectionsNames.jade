@@ -4,6 +4,7 @@
 
 div#collectionsNames(class=classes)
   a.close(href="#", onclick="$('#collectionsNames').remove()") ×
+  a.close(href="#", onclick="$('#collectionsNames').remove(); bindAddress('/collectionsNames');") ↻
   h4 Collections
   - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
   table(class=tableClasses)

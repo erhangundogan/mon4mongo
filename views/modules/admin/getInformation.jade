@@ -2,8 +2,9 @@
 - if (settings.theme.columnMode)
   - classes.push("span6");
 
-div#getInformation(class=classes)
-  a.close(href="#", onclick="$('#getInformation').remove()") ×
+#getInformation(class=classes)
+  a.close(href="#", onclick="$('#getInformation').remove();") ×
+  a.close(href="#", onclick="bindAddress('/getInformation'); $('#getInformation').remove();") ↻
   h4 Server information
   - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
   table(class=tableClasses)

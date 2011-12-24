@@ -1,0 +1,3 @@
+exports.theme = {
+  columnMode: true
+}

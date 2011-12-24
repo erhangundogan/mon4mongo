@@ -1,7 +1,10 @@
-#profilingLevel
-  .message
-    a.close(href="#", onclick="$('#profilingLevel').remove()") ×
-    h4 Profiling level
-    =result
-    .alert-actions
-      a.btn.small.primary(href="#") Set Level
+- var classes = ["message"];
+- if (settings.theme.columnMode)
+  - classes.push("span6");
+
+div#profilingLevel(class=classes)
+  a.close(href="#", onclick="$('#profilingLevel').remove()") ×
+  h4 Profiling level
+  p(style="text-transform: uppercase;")=result
+  .alert-actions
+    a.btn.small.primary(href="#") Set Level

@@ -1,9 +1,12 @@
-#pingServer
-  .message
-    a.close(href="#", onclick="$('#pingServer').remove()") ×
-    - if (result.is_error())
-      h4 Error
-      =result.error_message()
-    - else
-      h4 Server ping
-      p OK
+- var classes = ["message"];
+- if (settings.theme.columnMode)
+  - classes.push("span6");
+
+div#pingServer(class=classes)
+  a.close(href="#", onclick="$('#pingServer').remove()") ×
+  h4 Ping result
+  - if (result.is_error())
+    p Error
+    =result.error_message()
+  - else
+    p OK

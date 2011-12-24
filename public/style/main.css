@@ -1,20 +1,41 @@
 body {
   background: #ccc;
   padding-top: 60px;
+  margin-bottom: 25px;
 }
 
 .message {
   border: 2px solid #aaa;
   color: #333;
   background: #eef;
-  padding: .75em;
-  margin: 0 .5em 1em 1em;
+  padding: .5em;
+  margin: 0 .5em 1em .5em;
   -webkit-border-radius: .5em;
      -moz-border-radius: .5em;
           border-radius: .5em;
   -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
           box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+  opacity: 1;
+  color: #c00;
+  font-size: 30px;
+  margin: 0;
+  border: 1px solid #c00;
+  padding: 4px 2px;
+  border-radius: 3px;
+}
+
+.close:hover {
+  color: white;
+  text-decoration: none;
+  filter: none;
+  -khtml-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+  background: #c00;
 }
 
 .message #error {
@@ -28,12 +49,14 @@ footer {
   width: 100%;
   left: 0;
   bottom: 0;
-  padding: .5em 0;
+  padding: .25em 1em;
   margin: 0;
   height: 20px;
   line-height: 20px;
   overflow: hidden;
   background: #eef;
+  opacity: .5;
+  text-align: left;
   border-top: 1px solid #ccc;
   -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25);
      -moz-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25);
@@ -54,4 +77,38 @@ footer {
 
 .labelColumn {
   width: 150px;
+}
+
+.not-overflow {
+  overflow: scroll;
+}
+
+.info-table {
+  table-layout: fixed;
+}
+
+.fit-to-cell {
+  display: block;
+  word-wrap: break-word;
+  width: auto;
+}
+
+.well {
+  padding: 10px;
+}
+
+.container-fluid > .sidebar {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 200px;
+}
+
+.container-fluid > .content {
+  margin-left: 210px;
+}
+
+.container-fluid {
+  padding-left: 20px;
+  padding-right: 20px;
 }

@@ -1,11 +1,18 @@
-#getServer
-  .message
-    a.close(href="#", onclick="$('#getServer').remove()") ×
-    h4 Server settings
-    table.bordered-table.zebra-striped
-      each value,key in result
+- var classes = ["message"];
+- if (settings.theme.columnMode)
+  - classes.push("span6");
+
+div#getServer(class=classes)
+  a.close(href="#", onclick="$('#getServer').remove()") ×
+  h4 Server settings
+  - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
+  table(class=tableClasses)
+    each value,key in result
+      - if (typeof value !== "function")
         tr
           td.right.labelColumn=key
-          td=value
-    .alert-actions
-      a.btn.small.primary(href="#") Change Server
+          td
+            .fit-to-cell
+              =value
+  .alert-actions
+    a.btn.small.primary(href="#") Change Server

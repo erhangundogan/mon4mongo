@@ -9,6 +9,7 @@
  * Module dependencies.
  */
 var express = require("express")
+  , settings = require("./settings")
   , app = module.exports.app = express.createServer()
   , MongoMonitor = require("./mongo/monitor")
   , monitor = new MongoMonitor()
@@ -48,6 +49,9 @@ app.dynamicHelpers({
   },
   session: function(req, res) {
     return req.session;
+  },
+  settings: function() {
+    return settings;
   }
 });
 

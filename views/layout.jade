@@ -22,10 +22,11 @@ html(lang="tr")
     //script(src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js")
   body
     .container-fluid
+      !=partial("master/header")
+      !=partial("master/sidebar")
       !=body
     footer
-      p.center
-        Mongo Monitor by&nbsp;
+      p mon4mongo by&nbsp;
         a(target="_blank", href="http://mass.io") mass
         | &nbsp;2011
 

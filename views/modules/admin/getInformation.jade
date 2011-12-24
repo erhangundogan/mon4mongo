@@ -1,9 +1,15 @@
-#getInformation
-  .message
-    a.close(href="#", onclick="$('#getInformation').remove()") ×
-    h4 Server information
-    table.bordered-table.zebra-striped
-      each value,key in result
-        tr
-          td.right.labelColumn=key
-          td=value
+- var classes = ["message"];
+- if (settings.theme.columnMode)
+  - classes.push("span6");
+
+div#getInformation(class=classes)
+  a.close(href="#", onclick="$('#getInformation').remove()") ×
+  h4 Server information
+  - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
+  table(class=tableClasses)
+    each value,key in result
+      tr
+        td.right.labelColumn=key
+        td
+          .fit-to-cell
+            =value

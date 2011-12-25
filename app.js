@@ -91,6 +91,11 @@ function getRoute(base, command, template) {
 app.get("/", function(req, res){
   res.render("index");
 });
+
+app.get("/about", function(req, res){
+  res.render("about");
+});
+
 app.get("/getServer",
   getRoute(monitor, "getServer", "modules/monitor/getServer"));
 
@@ -108,6 +113,21 @@ app.get("/collectionsInfo",
 
 app.get("/collectionsNames",
   getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
+
+app.get("/collectionsNames",
+  getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
+
+app.post("/profilingLevel", function(req, res, next) {
+  var result = req.body.set;
+  if (result) {
+    // set profiling on
+  } else {
+    // set profiling off
+  }
+  //res.header('Content-Type', 'application/json');
+  res.json({ success:true });
+  res.end();
+});
 
 
 app.listen(settings.server.port);

@@ -71,6 +71,8 @@ $(function(){
       bindAddress(item.requestAddress);
     });
   });
+
+
 });
 
 function bindAddress(address) {

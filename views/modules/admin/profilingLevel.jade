@@ -2,10 +2,27 @@
 - if (settings.theme.columnMode)
   - classes.push("span6");
 
+script
+  $("#profilingLevel :checkbox").iphoneStyle({
+    onChange: function(el, value) {
+      $.ajax({
+        type: "post",
+        url: "/profilingLevel",
+        data: { set:value },
+        dataType: "json",
+        complete: function(jqxhr, status) {
+          alert(jqxhr);
+          alert(status);
+        }
+      });
+    }
+  });
+
 #profilingLevel(class=classes)
   a.close(href="#", onclick="$('#profilingLevel').remove()") ×
   a.close(href="#", onclick="$('#profilingLevel').remove(); bindAddress('/profilingLevel');") ↻
   h4 Profiling level
-  p(style="text-transform: uppercase;")=result
-  .alert-actions
-    a.btn.small.primary(href="#") Set Level
+  - if (result == "off")
+    input(type="checkbox", id="profilingLevelCheckbox")
+  - else
+    input(type="checkbox", checked="checked", id="profilingLevelCheckbox")

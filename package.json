@@ -1,7 +1,7 @@
 {
     "name": "mon4mongo"
   , "author": "Erhan Gundogan <erhan@trposta.net>"
-  , "version": "0.0.3"
+  , "version": "0.0.5"
   , "private": false
   , "dependencies": {
       "express": ">= 2.5.1"

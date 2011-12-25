@@ -11,6 +11,7 @@ Dependencies
 + express >= 2.5.1
 + jade >= 0.19.0
 + mongodb = 0.9.7
++ async >= 0.1.15
 
 You can clone github project or use npm to install.
 

@@ -14,7 +14,8 @@ var express = require("express")
   , MongoMonitor = require("./mongo/monitor")
   , monitor = new MongoMonitor()
   , MongoAdmin = require("./mongo/admin")
-  , admin = new MongoAdmin(monitor);
+  , admin = new MongoAdmin(monitor)
+  , utils = require("./utils");
 
 /**
  * Configuration.
@@ -22,6 +23,7 @@ var express = require("express")
 app.configure(function(){
   app.set("views", __dirname + "/views");
   app.set("view engine", "jade");
+  app.use(express.logger());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
@@ -52,6 +54,9 @@ app.dynamicHelpers({
   },
   settings: function() {
     return settings;
+  },
+  utils: function() {
+    return utils;
   }
 });
 
@@ -70,20 +75,44 @@ app.dynamicHelpers({
  * @api public
  */
 function getRoute(base, command, template) {
-  return function(req, res) {
+  return function(req, res, next) {
     base.fn(command, function(err, result) {
       if (err) {
-        res.partial("error", { err:err });
+        next(err);
       } else {
-        if (req.xhr) {
-          res.partial(template, { result:result });
-        } else {
-          res.render(template, { result:result });
-        }
+        req.pre_process = result;
+        req.template = template;
+        next();
       }
     });
   }
 }
+
+function postProcess(fn) {
+  return function(req, res, next) {
+    var result = req.pre_process;
+    function _process() {
+      if (req.xhr) {
+        return res.partial(req.template, { result:result });
+      } else {
+        return res.render(req.template, { result:result });
+      }
+    }
+
+    if (fn) {
+      fn(result, function(err, result) {
+        if (err) {
+          next(err);
+        } else {
+          _process(result);
+        }
+      });
+    } else {
+      _process(result);
+    }
+  }
+}
+
 
 /**
  * Routes.
@@ -97,25 +126,39 @@ app.get("/about", function(req, res){
 });
 
 app.get("/getServer",
-  getRoute(monitor, "getServer", "modules/monitor/getServer"));
+  getRoute(monitor, "getServer", "modules/monitor/getServer"), postProcess());
 
 app.get("/getInformation",
-  getRoute(admin, "serverInfo", "modules/admin/getInformation"));
+  getRoute(admin, "serverInfo", "modules/admin/getInformation"), postProcess());
 
 app.get("/pingServer",
-  getRoute(admin, "ping", "modules/admin/pingServer"));
+  getRoute(admin, "ping", "modules/admin/pingServer"), postProcess());
 
 app.get("/profilingLevel",
-  getRoute(admin, "profilingLevel", "modules/admin/profilingLevel"));
+  getRoute(admin, "profilingLevel", "modules/admin/profilingLevel"), postProcess());
 
 app.get("/collectionsInfo",
-  getRoute(monitor, "collectionsInfo", "modules/monitor/collectionsInfo"));
+  getRoute(monitor, "collectionsInfo", "modules/monitor/collectionsInfo"), postProcess());
 
 app.get("/collectionsNames",
-  getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
+  getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"), postProcess());
 
-app.get("/collectionsNames",
-  getRoute(monitor, "collectionNames", "modules/monitor/collectionsNames"));
+app.get("/listDatabases",
+  getRoute(monitor, "listDatabases", "modules/monitor/listDatabases"),
+  postProcess(
+    /*
+    function(items, callback) {
+      try {
+        var result = items.map(function(item) {
+          return JSON.stringify(item);
+        });
+        callback(null, result);
+      } catch(err) {
+        callback(err, null);
+      }
+    }
+    */
+));
 
 app.post("/profilingLevel", function(req, res, next) {
   var result = req.body.set;

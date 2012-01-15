@@ -76,7 +76,7 @@ Admin.prototype.fn = function(method, callback) {
   });
 
   return this;
-}
+};
 
 /*
  * Exports

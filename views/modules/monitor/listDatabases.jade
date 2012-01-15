@@ -1,0 +1,22 @@
+- var classes = ["message"];
+- if (settings.theme.columnMode)
+  - classes.push("span6");
+
+#listDatabases(class=classes)
+  a.close(href="#", onclick="$('#listDatabases').remove()") ×
+  a.close(href="#", onclick="$('#listDatabases').remove(); bindAddress('/listDatabases');") ↻
+  h4 Database List
+  - var tableClasses = ["bordered-table", "zebra-striped", "condensed-table", "info-table"];
+  table(class=tableClasses)
+    tr
+      th Name
+      th Size
+      th Empty
+    each value,key in result
+      tr
+        td
+          .fit-to-cell=value.name
+        td
+          .fit-to-cell=value.sizeOnDisk
+        td
+          .fit-to-cell=value.empty

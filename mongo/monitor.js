@@ -34,7 +34,7 @@ function Monitor(host, port, dbName) {
   this.port = port || (process.env["MONGO_NODE_DRIVER_PORT"] != null
     ? process.env["MONGO_NODE_DRIVER_PORT"]
     : Connection.DEFAULT_PORT);
-  this.dbName = dbName || "test";
+  this.dbName = dbName || "admin";
 }
 
 /**
@@ -196,7 +196,37 @@ Monitor.prototype.fn = function(method, callback) {
   }
 
   return this;
-}
+};
+
+Monitor.prototype.listDatabases = function(callback) {
+  var self = this,
+      db = this.db;
+
+  function execCmd(db, command) {
+    db.executeDbCommand(command, function(err, result) {
+      if (err) {
+        console.log(err);
+        return callback(err, null);
+      } else {
+        if (result && result.documents && result.documents.length > 0) {
+          var dbs = result.documents[0];
+          if (dbs.hasOwnProperty("databases")) {
+            return callback(null, dbs.databases);
+          }
+        }
+        return callback(null, null);
+      }
+    });
+  }
+
+  if (!db) {
+    this.initialize(function(err, _db) {
+      execCmd(_db, {"listDatabases":1});
+    });
+  } else {
+    execCmd(db, {"listDatabases":1});
+  }
+};
 
 /*
  * Exports

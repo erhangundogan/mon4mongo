@@ -59,7 +59,10 @@ $(function(){
       requestAddress: "/collectionsInfo" },
     { navLinkID: "#collectionsNamesLink",
       bodyElementID: "#collectionsNames",
-      requestAddress: "/collectionsNames" }
+      requestAddress: "/collectionsNames" },
+    { navLinkID: "#listDatabasesLink",
+      bodyElementID: "#listDatabases",
+      requestAddress: "/listDatabases" },
   ].map(function(item) {
     $(item.navLinkID).bind("click", function(event) {
       event.preventDefault();

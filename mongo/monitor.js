@@ -198,6 +198,17 @@ Monitor.prototype.fn = function(method, callback) {
   return this;
 };
 
+/**
+ * Get list of databases on server.
+ * Must use admin database to execute {"listDatabases":1} command
+ * TODO: switch to admin db before execute
+ *
+ * Mongo shell usage:
+ *   use admin
+ *   db.runCommand({"listDatabases":1});
+ *
+ * @param {function} callback
+ */
 Monitor.prototype.listDatabases = function(callback) {
   var self = this,
       db = this.db;
@@ -225,6 +236,84 @@ Monitor.prototype.listDatabases = function(callback) {
     });
   } else {
     execCmd(db, {"listDatabases":1});
+  }
+};
+
+/**
+ * Command execution
+ *
+ * @param {string} db
+ * @param {object} command
+ * @param {function} callback
+ */
+function executeCommand(db, command, callback) {
+  if (!db) {
+    return callback(null, null);
+  } else {
+    db.executeDbCommand(command, function(err, result) {
+      if (err) {
+        console.log(err);
+        return callback(err, null);
+      } else {
+        return callback(null, result);
+      }
+    });
+  }
+}
+
+/**
+ * Gets active databases stats
+ * use stat property to get specific variable.
+ * Without specific variable results are:
+   {
+    "db" : "databaseName",
+    "collections" : 5,
+    "objects" : 23,
+    "avgObjSize" : 138.6086956521739,
+    "dataSize" : 3188,
+    "storageSize" : 110592,
+    "numExtents" : 6,
+    "indexes" : 8,
+    "indexSize" : 65408,
+    "fileSize" : 201326592,
+    "nsSizeMB" : 16,
+    "ok" : 1
+   }
+ *
+ * @param {string} stat (optional)
+ * @param {function} callback
+ */
+Monitor.prototype.activeDatabaseInfo = function(stat, callback) {
+  var self = this,
+      db = this.db,
+      haveStat = true;
+
+  if (!callback && "function" == typeof stat) {
+    callback = stat;
+    haveStat = false;
+  }
+
+  function _callback(err, result) {
+    if (err) {
+      return callback(err);
+    } else {
+      if (result && result.documents && result.documents.length > 0) {
+        var dbs = result.documents[0];
+        return haveStat && dbs.hasOwnProperty(stat) ?
+          callback(null, dbs[stat]) :
+          callback(null, dbs);
+      } else {
+        return callback(null, null);
+      }
+    }
+  }
+
+  if (!db) {
+    this.initialize(function(err, _db) {
+      executeCommand(_db, {"listDatabases":1}, _callback);
+    });
+  } else {
+    executeCommand(db, {"listDatabases":1}, _callback);
   }
 };
 

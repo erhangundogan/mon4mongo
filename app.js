@@ -160,6 +160,36 @@ app.get("/listDatabases",
     */
 ));
 
+app.get("/activeDatabase", function(req, res) {
+  monitor.initialize(function(err, db) {
+    if (err) {
+      res.end();
+    } else {
+      res.json(db.databaseName);
+    }
+  });
+  /*
+  monitor.activeDatabaseInfo("db", function(err, dbName) {
+    res.json(dbName);
+  })
+  */
+});
+
+app.get("/changeDatabase/:db", function(req, res) {
+  if (!req.params.db) {
+    res.end();
+  } else {
+    admin.initialize(function(err, _admin) {
+      if (err) {
+        res.json(false);
+      } else {
+        _admin.db.databaseName = req.params.db;
+        res.json(true);
+      }
+    });
+  }
+});
+
 app.post("/profilingLevel", function(req, res, next) {
   var result = req.body.set;
   if (result) {

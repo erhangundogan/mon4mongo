@@ -15,8 +15,12 @@
     each value,key in result
       tr
         td
-          .fit-to-cell=value.name
+          .fit-to-cell.db-link
+            a(href="#", data-db=value.name)=value.name
         td
           .fit-to-cell=value.sizeOnDisk
         td
           .fit-to-cell=value.empty
+  script
+    bindDBAddresses();
+    highlightActiveDB()

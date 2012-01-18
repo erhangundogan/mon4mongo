@@ -70,18 +70,54 @@ $(function(){
       if (panel && panel.length > 0) {
         return;
       }
-
       bindAddress(item.requestAddress);
     });
   });
-
-
 });
 
-function bindAddress(address) {
+function bindDBAddresses() {
+  $(".db-link a").each(function(index, item) {
+    $(this).bind("click", function(event) {
+      event.preventDefault();
+      var address = "/changeDatabase/" + $(this).attr("data-db");
+      $.ajax({
+        url: address,
+        dataType: "json",
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert(textStatus);
+          console.log(jqXHR);
+        },
+        complete: function(jqXHR, textStatus) {
+          highlightActiveDB();
+        }
+      });
+    });
+  });
+}
+
+function highlightActiveDB() {
+  $.ajax({
+    url: "/activeDatabase",
+    dataType: "json",
+    success: function(data, textStatus, jqXHR) {
+      if (data) {
+        $(".db-link a").each(function(index) {
+          var db = $(this).attr("data-db");
+          if (data == db) {
+            $(this).attr("class", "active");
+          } else {
+            $(this).removeAttr("class");
+          }
+        });
+      }
+    }
+  });
+}
+
+function bindAddress(address, responseType) {
   $.ajax({
     url: address,
-    dataType: "html",
+    dataType: responseType || "html",
     success: function(err, result) {
       var vAlign = new vAlignment();
       var element = "#" + vAlign.calculateColumns().getKey().result.key;

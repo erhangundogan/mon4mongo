@@ -125,3 +125,8 @@ footer {
 .about h1 {
   color: white;
 }
+
+a.active {
+  font-weight: bold;
+  color: #f00;
+}

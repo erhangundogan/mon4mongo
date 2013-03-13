@@ -4,6 +4,8 @@ MongoDB database management web server boosted with node.js and express. xhr and
 
 ![mon4mongo Screenshot](https://s3-eu-west-1.amazonaws.com/mass-io/github/mon4mongo-ss.jpg)
 
+Project under development...
+
 Dependencies
 ------------
 

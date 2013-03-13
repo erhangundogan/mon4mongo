@@ -9,10 +9,10 @@ Project under development...
 Dependencies
 ------------
 
-+ node.js = 0.4.12
++ node.js >= 0.4.12
 + express = 2.5.8
 + jade >= 0.19.0
-+ mongodb = 0.9.7
++ mongodb >= 0.9.7
 + async >= 0.1.15
 
 You can clone github project or use npm to install.

@@ -1,3 +1,5 @@
+[![NPM version](https://github.com/erhangundogan/mon4mongo.png)](https://github.com/erhangundogan/mon4mongo)
+
 mon4mongo
 ==========
 MongoDB database management web server boosted with node.js and express. xhr and partial renders are also used.

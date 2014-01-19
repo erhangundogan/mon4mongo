@@ -1,4 +1,4 @@
-[![NPM version](https://github.com/erhangundogan/mon4mongo.png)](https://github.com/erhangundogan/mon4mongo)
+[![NPM version](https://badge.fury.io/js/mon4mongo.png)](http://badge.fury.io/js/mon4mongo)
 
 mon4mongo
 ==========

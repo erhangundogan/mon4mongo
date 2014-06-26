@@ -38,7 +38,6 @@ Author
 
 + http://twitter.com/erhangundogan
 + http://github.com/erhangundogan
-+ http://mass.io
 
 
 License
